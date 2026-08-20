@@ -88,20 +88,11 @@ def combined_score():
             return jsonify({"error": f"Missing fields in recent_transactions[{i}]: {missing_txn}"}), 400
     return jsonify(engine.evaluate_combined(applicant, recent_transactions))
 
-@app.route("/", methods=["GET"])
+@app.route("/")
 def home():
-    return jsonify({
-        "project": "Credit Card Risk and Fraud Analysis",
-        "status": "running",
-        "endpoints": {
-            "health": "/health",
-            "credit_risk": "/credit/score",
-            "fraud_detection": "/fraud/score",
-            "combined_analysis": "/combined/score"
-        }
-    })
-
+    return "Credit Fraud Risk API is running!"
 if __name__ == "__main__":
     if not MODELS_READY:
         print("WARNING: models not found. Run `python3 train_and_demo.py` first, then restart this API.")
     app.run(host="0.0.0.0", port=5000, debug=False)
+    

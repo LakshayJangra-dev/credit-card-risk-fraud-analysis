@@ -1,21 +1,56 @@
-# Python virtual environment
+# =========================
+# Python
+# =========================
+
+# Virtual environment
 venv/
+.venv/
 
 # Python cache
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 
 # Environment variables / secrets
 .env
 .env.*
 
-# IDE files
-.vscode/
+# =========================
+# Node / React / Vite
+# =========================
 
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Vite build output
+dist/
+frontend/dist/
+
+# =========================
+# IDE
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
 # OS files
+# =========================
+
 .DS_Store
 Thumbs.db
 
+# =========================
 # Logs
+# =========================
+
 *.log
+
+# =========================
+# Python generated files
+# =========================
+
+# Machine learning model cache
+__pycache__/
