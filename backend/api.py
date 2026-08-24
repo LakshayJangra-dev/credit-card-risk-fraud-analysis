@@ -30,7 +30,7 @@ from auth.auth import (
 )
 
 app = Flask(__name__)
-app.config["JWT_SECRET_KEY"] = "credit-risk-fraud-analysis"
+app.config["JWT_SECRET_KEY"] = "credit-risk-fraud-analysis-secret-key-2026"
 
 jwt = JWTManager(app)
 
@@ -126,6 +126,7 @@ def health():
 
 
 @app.route("/credit/score", methods=["POST"])
+@jwt_required()
 def credit_score():
     if not MODELS_READY:
         return jsonify({"error": "Models not trained yet. Run train_and_demo.py first."}), 503
@@ -137,6 +138,7 @@ def credit_score():
 
 
 @app.route("/fraud/score", methods=["POST"])
+@jwt_required()
 def fraud_score():
     if not MODELS_READY:
         return jsonify({"error": "Models not trained yet. Run train_and_demo.py first."}), 503
@@ -148,6 +150,7 @@ def fraud_score():
 
 
 @app.route("/combined/score", methods=["POST"])
+@jwt_required()
 def combined_score():
     if not MODELS_READY:
         return jsonify({"error": "Models not trained yet. Run train_and_demo.py first."}), 503
