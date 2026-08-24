@@ -16,8 +16,25 @@ from credit_risk_model import CreditRiskModel, FEATURES as CREDIT_FEATURES
 from fraud_detection_model import FraudDetectionModel, FEATURES as FRAUD_FEATURES
 from risk_engine import RiskEngine
 import os
+from flask_jwt_extended import (
+    JWTManager,
+    jwt_required,
+    get_jwt_identity
+)
+
+from auth.auth import (
+    init_db,
+    signup_user,
+    login_user,
+    get_user_by_id
+)
 
 app = Flask(__name__)
+app.config["JWT_SECRET_KEY"] = "credit-risk-fraud-analysis"
+
+jwt = JWTManager(app)
+
+init_db()
 
 credit_model = CreditRiskModel()
 fraud_model = FraudDetectionModel()
@@ -38,7 +55,67 @@ else:
 
 def _missing_fields(payload, required):
     return [f for f in required if f not in payload]
+@app.route("/auth/signup", methods=["POST"])
+def auth_signup():
+    payload = request.get_json(force=True)
 
+    name = payload.get("name", "").strip()
+    email = payload.get("email", "").strip()
+    password = payload.get("password", "")
+
+    if not name:
+        return jsonify({"error": "Name is required."}), 400
+
+    if not email:
+        return jsonify({"error": "Email is required."}), 400
+
+    if not password:
+        return jsonify({"error": "Password is required."}), 400
+
+    if len(password) < 8:
+        return jsonify({
+            "error": "Password must be at least 8 characters."
+        }), 400
+
+    try:
+        user = signup_user(name, email, password)
+        return jsonify(user), 201
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 409
+    
+    
+@app.route("/auth/login", methods=["POST"])
+def auth_login():
+    payload = request.get_json(force=True)
+
+    email = payload.get("email", "").strip()
+    password = payload.get("password", "")
+
+    if not email or not password:
+        return jsonify({
+            "error": "Email and password are required."
+        }), 400
+
+    try:
+        user = login_user(email, password)
+        return jsonify(user)
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 401
+@app.route("/auth/me", methods=["GET"])
+@jwt_required()
+def auth_me():
+    user_id = get_jwt_identity()
+
+    user = get_user_by_id(user_id)
+
+    if user is None:
+        return jsonify({
+            "error": "User not found."
+        }), 404
+
+    return jsonify(user)
 
 @app.route("/health", methods=["GET"])
 def health():
