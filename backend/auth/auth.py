@@ -17,21 +17,23 @@ def get_db():
 
 def init_db():
     conn = get_db()
-
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL
-        )
-    """)
-
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL
+            )
+        """)
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def signup_user(name, email, password):
+    clean_name = name.strip() if name else ""
+    clean_email = email.lower().strip() if email else ""
 
     password_hash = generate_password_hash(password)
 
@@ -43,7 +45,7 @@ def signup_user(name, email, password):
             INSERT INTO users (name, email, password_hash)
             VALUES (?, ?, ?)
             """,
-            (name, email.lower().strip(), password_hash)
+            (clean_name, clean_email, password_hash)
         )
 
         conn.commit()
@@ -56,8 +58,8 @@ def signup_user(name, email, password):
 
         return {
             "id": user_id,
-            "name": name,
-            "email": email.lower().strip(),
+            "name": clean_name,
+            "email": clean_email,
             "token": token
         }
 
@@ -69,19 +71,20 @@ def signup_user(name, email, password):
 
 
 def login_user(email, password):
+    clean_email = email.lower().strip() if email else ""
 
     conn = get_db()
-
-    user = conn.execute(
-        """
-        SELECT id, name, email, password_hash
-        FROM users
-        WHERE email = ?
-        """,
-        (email.lower().strip(),)
-    ).fetchone()
-
-    conn.close()
+    try:
+        user = conn.execute(
+            """
+            SELECT id, name, email, password_hash
+            FROM users
+            WHERE email = ?
+            """,
+            (clean_email,)
+        ).fetchone()
+    finally:
+        conn.close()
 
     if user is None:
         raise ValueError("Invalid email or password.")
@@ -102,19 +105,23 @@ def login_user(email, password):
 
 
 def get_user_by_id(user_id):
+    try:
+        user_id = int(user_id)
+    except (ValueError, TypeError):
+        return None
 
     conn = get_db()
-
-    user = conn.execute(
-        """
-        SELECT id, name, email
-        FROM users
-        WHERE id = ?
-        """,
-        (user_id,)
-    ).fetchone()
-
-    conn.close()
+    try:
+        user = conn.execute(
+            """
+            SELECT id, name, email
+            FROM users
+            WHERE id = ?
+            """,
+            (user_id,)
+        ).fetchone()
+    finally:
+        conn.close()
 
     if user is None:
         return None
@@ -123,4 +130,4 @@ def get_user_by_id(user_id):
         "id": user["id"],
         "name": user["name"],
         "email": user["email"]
-    }
+    }
