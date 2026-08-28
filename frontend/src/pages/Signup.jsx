@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, ShieldCheck, Loader2, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import AuthShell from "../components/AuthShell";
@@ -22,9 +22,10 @@ function PasswordCheck({ ok, label }) {
 export default function Signup() {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(searchParams.get("email") || "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -58,7 +59,7 @@ export default function Signup() {
     setLoading(true);
     try {
       await signup({ name, email, password });
-      navigate("/", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(err?.message || "Something went wrong. Please try again.");
     } finally {
