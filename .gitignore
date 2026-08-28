@@ -54,3 +54,7 @@ Thumbs.db
 
 # Machine learning model cache
 __pycache__/
+
+
+# DATA
+backend/users.db
