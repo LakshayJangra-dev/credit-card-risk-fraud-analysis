@@ -1,0 +1,83 @@
+/* DigitalWall Risk Engine Theme CSS */
+
+@layer utilities {
+  /* Glassmorphism Panel Cards */
+  .glass-card {
+    background-color: rgba(17, 22, 31, 0.9);
+    border: 1px solid #1E2633;
+    border-radius: 1rem;
+    backdrop-filter: blur(16px);
+  }
+
+  .glass-card-hover {
+    transition: all 0.2s ease-in-out;
+  }
+  .glass-card-hover:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+  }
+
+  /* Primary Action Buttons */
+  .btn-gradient-purple {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+    color: #FFFFFF;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.3);
+    transition: all 0.2s ease-in-out;
+  }
+  .btn-gradient-purple:hover {
+    background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+    box-shadow: 0 12px 30px -5px rgba(139, 92, 246, 0.4);
+  }
+
+  /* Secondary Dark Buttons */
+  .btn-dark-outline {
+    background-color: #161B22;
+    border: 1px solid #262E39;
+    color: #E7EAF0;
+    font-weight: 500;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease-in-out;
+  }
+  .btn-dark-outline:hover {
+    border-color: #384354;
+    color: #FFFFFF;
+  }
+
+  /* Inputs */
+  .input-dark {
+    background-color: #18202C;
+    border: 1px solid #262E39;
+    border-radius: 0.75rem;
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    transition: all 0.2s ease-in-out;
+  }
+  .input-dark::placeholder {
+    color: #4E5766;
+  }
+  .input-dark:focus {
+    outline: none;
+    border-color: #8B5CF6;
+    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.5);
+  }
+
+  /* Badges & Tags */
+  .badge-purple {
+    background-color: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #A78BFA;
+    font-family: monospace;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+  }
+
+  .badge-green {
+    background-color: rgba(63, 179, 127, 0.1);
+    border: 1px solid rgba(63, 179, 127, 0.3);
+    color: #3FB37F;
+  }
+}

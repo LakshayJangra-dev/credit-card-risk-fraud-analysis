@@ -4,6 +4,7 @@ const TABS = [
   { id: "credit", label: "Credit Application" },
   { id: "fraud", label: "Transaction Check" },
   { id: "combined", label: "Combined View" },
+  { id: "simulator", label: "AI Engine Simulator" },
 ];
 
 export default function TabBar({ active, onChange }) {
