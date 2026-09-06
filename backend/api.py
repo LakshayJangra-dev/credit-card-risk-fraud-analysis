@@ -39,15 +39,20 @@ init_db()
 credit_model = CreditRiskModel()
 fraud_model = FraudDetectionModel()
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+credit_model_file = os.path.join(BASE_DIR, "credit_risk_model.joblib")
+fraud_classifier_file = os.path.join(BASE_DIR, "fraud_model_classifier.joblib")
+fraud_anomaly_file = os.path.join(BASE_DIR, "fraud_model_anomaly.joblib")
+
 MODELS_READY = (
-    os.path.exists("credit_risk_model.joblib")
-    and os.path.exists("fraud_model_classifier.joblib")
-    and os.path.exists("fraud_model_anomaly.joblib")
+    os.path.exists(credit_model_file)
+    and os.path.exists(fraud_classifier_file)
+    and os.path.exists(fraud_anomaly_file)
 )
 
 if MODELS_READY:
-    credit_model.load("credit_risk_model.joblib")
-    fraud_model.load("fraud_model")
+    credit_model.load(credit_model_file)
+    fraud_model.load(os.path.join(BASE_DIR, "fraud_model"))
     engine = RiskEngine(credit_model, fraud_model)
 else:
     engine = None

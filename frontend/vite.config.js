@@ -8,11 +8,11 @@ export default defineConfig({
   server: {
     proxy: {
       // Forward API calls to the Flask backend during local dev
-      '/credit': 'http://localhost:5000',
-      '/fraud': 'http://localhost:5000',
-      '/combined': 'http://localhost:5000',
-      '/health': 'http://localhost:5000',
-      '/auth': 'http://localhost:5000',
+      '/credit': 'http://127.0.0.1:5000',
+      '/fraud': 'http://127.0.0.1:5000',
+      '/combined': 'http://127.0.0.1:5000',
+      '/health': 'http://127.0.0.1:5000',
+      '/auth': 'http://127.0.0.1:5000',
     },
   },
 })
